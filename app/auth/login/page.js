@@ -6,7 +6,8 @@ import { VscGithubInverted } from "react-icons/vsc";
  export default function LoginPage () {
       return (
          <main className="min-h-screen bg-gray-50 flex justify-center">
-            <div className="w-full md:w-[350px] max-h-[400px] rounded md:shadow-md md:py-8 px-3 flex flex-col gap-5 ">
+            <div className="w-full md:w-[350px] max-h-[400px] rounded md:shadow-md md:py-8
+                                                              px-3 flex flex-col gap-5 ">
                   <div>
                      <h1 className="text-2xl font-semibold text-center text-gray-700">Sign In</h1>
                      <p className="block text-indigo-500 text-center">Create account or sign in</p>

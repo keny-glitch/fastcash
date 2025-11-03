@@ -1,5 +1,5 @@
 export function Sidebar (){
     return(
-        <main className="text-3xl">this is sidebar</main>
+        <main className="bg-white w-full h-15 shadow-md">welcome to sidebar</main>
     )
 }
