@@ -1,7 +1,9 @@
 
+import { signIn } from "@/auth";
 import { TextField } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { VscGithubInverted } from "react-icons/vsc";
+
 
  export default function LoginPage () {
       return (
@@ -25,12 +27,23 @@ import { VscGithubInverted } from "react-icons/vsc";
                   </form>
                    <p className="text-center text-gray-400">Or sign up with</p>
                   <div className="flex justify-center gap-4"> 
-                      <form>
+                      <form 
+                      action={async ()=>{
+                        "use server"
+                        await signIn("google")
+                      }}
+                      >
                         <button type="submit" className="w-10 h-10 border rounded-md shadow-lg border-gray-300 cursor-pointer">
                         <FcGoogle className="text-4xl" />
                         </button>
                      </form>
-                     <form>
+
+                     <form
+                     action={async ()=>{
+                        "use server"
+                        await signIn("github")
+                      }}
+                     >
                         <button type="submit" className="w-10 h-10 border rounded-md shadow-lg border-gray-300 cursor-pointer">
                         <VscGithubInverted className="text-4xl" />
                         </button>

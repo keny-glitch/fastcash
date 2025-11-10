@@ -1,6 +1,12 @@
-  "use client"
+   "use client"
 import { listItemSecondaryActionClasses, TextField } from "@mui/material";
+import { useFormik } from "formik";
 import { useState } from "react";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+    amount: yup.number().required("amount is required").min(5000)
+})
 
 const duration = [
     {id:"30",days:30},
@@ -12,6 +18,20 @@ export default function GetLoan (){
     const [clickedRate, setClickedRate]= useState(undefined);
     const [rate,setRate]= useState(0)
     const[loanDuration,setLoanDuration]= useState(0)
+
+     const {handleSubmit,handleChange, values,touched,errors}=useFormik({
+        initialValues:{
+            amount:0,
+        },
+        
+        onSubmit:()=>{
+            alert("Loan Request received")
+            alert(`you have requested a loan of ${values.amount} for ${loanDuration} days at an
+                 intrest rate of ${rate}%`)
+        },
+        validationSchema:schema,
+     })
+
     return(
         <main className="min-h-screen bg-gray-50 flex justify-center py-4 md:py-6 lg:px-16 ">
             <div className="w-full md:w-[350px] h-[550px] rounded-md shadow-md flex 
@@ -19,7 +39,8 @@ export default function GetLoan (){
 
               <h1 className="text-center text-lg font-semibold text-indigo-500">Get Instant Loan from fastcash</h1>
 
-              <form className="flex flex-col gap-4">
+              <form onSubmit={handleSubmit}
+              className="flex flex-col gap-4">
                 <div className="w-full mb-2">
                     <TextField
                     type="number"
@@ -27,22 +48,23 @@ export default function GetLoan (){
                     placeholder="Enter Loan Amount"
                     id="amount"
                     size="small"
+                    value={values.amount}
+                    onChange={handleChange}
                     className="w-full"
                     />
+                    {touched.amount && errors.amount ? <span className="text-xs text-red-500">
+                    {errors.amount}</span> : null}
                 </div>
 
                 <div className="border-dashed border border-indigo-600 p-4 rounded-md">
                     <p>Choose your Loan Duration</p>
                     <ul className="grid grid-cols-3 gap-2">
-                        {duration.map(item=>
-                        <li key={item.id} 
-                        onClick={()=>{
-                            setClickedRate(item.id)
+                        {duration.map(item=><li key={item.id} onClick={()=>{
                             if(item.days === 30){
                                 setRate(10)
                             }
                             else if(item.days === 60){
-                                setRate(20)
+                                setRate(20) 
                             }
                             else if(item.days === 90){
                                 setRate(30)
@@ -58,13 +80,13 @@ export default function GetLoan (){
                                 setLoanDuration(90);
                             }
                         }}
-                         
+                    
                         
                         className="h-16 bg-indigo-500 text-white text-md rounded-md
                          justify-center flex items-center cursor-pointer">{item.days} Days</li>
-                         )}
+                         )} 
                     </ul>
-                </div>
+                </div> 
 
                 <div className="border-dashed border border-indingo-600 p-4 rounded-md">
                     <p className="text-indigo-800">Intrest rate for {loanDuration}</p>
