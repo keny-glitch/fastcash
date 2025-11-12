@@ -1,4 +1,4 @@
-         "use client"
+          "use client"
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -10,7 +10,7 @@ const schema = yup.object().shape({
     dob: yup.date().required("Date of birth is required"),
     phone: yup.number().required("phone number is required").min(11),
     gender: yup.string().oneOf(["male","female"]).required("Gender is required"),
-    bvn: yup.string().required("address is required").min(10),
+    address: yup.string().required("address is required").min(10),
 
 })
 
