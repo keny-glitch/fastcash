@@ -1,113 +1,121 @@
-   "use client"
-import { listItemSecondaryActionClasses, TextField } from "@mui/material";
+    "use client"
+import { db } from "@/config/firebase.config";
+import { TextField } from "@mui/material";
+import { addDoc, collection } from "firebase/firestore";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import * as yup from "yup";
 
-const schema = yup.object().shape({
-    amount: yup.number().required("amount is required").min(5000)
-})
+ const schema = yup.object().shape({
+    amount: yup.number().required("Amount is required").min(5000),
+ });
 
 const duration = [
-    {id:"30",days:30},
-    {id:"60",days:60},
-    {id:"90",days:90}
+    {id: "30", days: 30},
+    {id: "60", days: 60},
+    {id: "90",days: 90}
 ]
 
-export default function GetLoan (){
-    const [clickedRate, setClickedRate]= useState(undefined);
-    const [rate,setRate]= useState(0)
-    const[loanDuration,setLoanDuration]= useState(0)
+export default function GetLoan () {
+    const {data : session} = useSession();
+    console.log(session);
+    const [clickedRate, setClickedRate] = useState(undefined);
+    const [rate,setRate] = useState(0);
+    const [loanDuration,setLoanDuration] = useState(0);
+     const [repayment,setRepayment] = useState(0);
 
-     const {handleSubmit,handleChange, values,touched,errors}=useFormik({
-        initialValues:{
-            amount:0,
+    const {handleSubmit,handleChange, values,touched, errors} = useFormik({
+        initialValues: {
+            amount: 0,
         },
-        
-        onSubmit:()=>{
-            alert("Loan Request received")
-            alert(`you have requested a loan of ${values.amount} for ${loanDuration} days at an
-                 intrest rate of ${rate}%`)
+        onSubmit: async()=>{
+            try {
+                 await addDoc(collection(db, "loans"),{
+                    user: session?.user?.id,
+                    amount: values.amount,
+                    rate: rate,
+                    duration: loanDuration,
+                    repayment: repayment,
+                    timeOfRequest: new Date(), 
+                }) 
+                alert('Loan request successful')
+            }
+            catch(errors){
+                console.error("Error taking loans", errors);
+            }
+
         },
         validationSchema:schema,
-     })
+    })
+    useEffect(()=>{
+        if(values.amount > 1) {
+            const Interest = (rate * values.amount) / 100 
+            setRepayment(values.amount + Interest);
+        }
+    },[values.amount,rate]);
 
-    return(
-        <main className="min-h-screen bg-gray-50 flex justify-center py-4 md:py-6 lg:px-16 ">
-            <div className="w-full md:w-[350px] h-[550px] rounded-md shadow-md flex 
-                            flex-col gap-4 p-2 border border-gray-200">
+      return (
+         <main className="min-h-screen flex justify-center py-4 md:py-6 lg:px-16">
+            <div className="w-full  md:w-[350px] h-[550px] flex flex-col gap-4 p-2 border border-gray-200 rounded-md shadow-md ">
+                <h1 className="text-center text-lg font-semibold text-indigo-500">Get Instant Loan from FastCash</h1>
+                <form onSubmit={handleSubmit} 
+                 className="flex flex-col gap-4">
+                    <div className="w-full mb-2">
+                        <TextField
+                        type="number"
+                        label="Amount"
+                        placeholder="Enter Loan Amount"
+                        id="amount"
+                        size="small"
+                        value={values.amount}
+                        onChange={handleChange}
+                        className="w-full"
+                        />
+                        {touched.amount && errors.amount ? <span className="text-xs text-red-500">{errors.amount}</span> : null}
+                    </div>
+                    <div className="border-dashed border border-indigo-600 p-4 rounded-md">
+                        <p>Choose your Loan Duration</p>
+                        <ul className="grid grid-cols-3 gap-2">
+                            {duration.map(item =>
+                            <li key={item.id}
+                              onClick={()=>{
+                                if (item.days === 30) {
+                                    setRate(10)
+                                }else if(item.days === 60) {
+                                    setRate(20)
+                                }else if (item.days === 90) {
+                                    setRate(30)
+                                }
+                                if(item.days === 30) {
+                                    setLoanDuration(30)
+                                }else if (item.days === 60) {
+                                    setLoanDuration(60)
+                                }else if (item.days === 90) {
+                                    setLoanDuration(90);
+                                }
+                                
+                              }}
+                            className="h-16 bg-indigo-500 text-white text-lg rounded-md justify-center flex items-center cursor-pointer ">{item.days} Days</li>
+                            )}
+                        </ul>
 
-              <h1 className="text-center text-lg font-semibold text-indigo-500">Get Instant Loan from fastcash</h1>
-
-              <form onSubmit={handleSubmit}
-              className="flex flex-col gap-4">
-                <div className="w-full mb-2">
-                    <TextField
-                    type="number"
-                    label="Amount"
-                    placeholder="Enter Loan Amount"
-                    id="amount"
-                    size="small"
-                    value={values.amount}
-                    onChange={handleChange}
-                    className="w-full"
-                    />
-                    {touched.amount && errors.amount ? <span className="text-xs text-red-500">
-                    {errors.amount}</span> : null}
-                </div>
-
-                <div className="border-dashed border border-indigo-600 p-4 rounded-md">
-                    <p>Choose your Loan Duration</p>
-                    <ul className="grid grid-cols-3 gap-2">
-                        {duration.map(item=><li key={item.id} onClick={()=>{
-                            if(item.days === 30){
-                                setRate(10)
-                            }
-                            else if(item.days === 60){
-                                setRate(20) 
-                            }
-                            else if(item.days === 90){
-                                setRate(30)
-                            }
-
-                            if(item.days === 30){
-                                setLoanDuration(30)
-                            }
-                            else if(item.days === 60){
-                                setLoanDuration(60)
-                            }
-                            else if(item.days === 90){
-                                setLoanDuration(90);
-                            }
-                        }}
-                    
-                        
-                        className="h-16 bg-indigo-500 text-white text-md rounded-md
-                         justify-center flex items-center cursor-pointer">{item.days} Days</li>
-                         )} 
-                    </ul>
-                </div> 
-
-                <div className="border-dashed border border-indingo-600 p-4 rounded-md">
-                    <p className="text-indigo-800">Intrest rate for {loanDuration}</p>
-                    <p className="text-4xl text-indigo-800">{rate}%</p>
-                </div>
-
-                <div className="flex flex-col gap-3 bg-linear-to-b from bg-indigo-400
-                 to-indigo-900 border-dshed border-indigo600 p-4 rounded">
-                    <p className="text-indigo-200">Repayment Amount</p>
-                    <p className="text-white text-4xl">500,000</p>
-                </div>
-
-                <div>
-                    <button type="submit" className="p-2 rounded-md bg-indigo-800 text-white uppercse">GET LOAN</button>
-                </div>
-
-              </form>
-
+                    </div>
+                    <div className="border-dashed border border-indigo-600 p-4 rounded-md">
+                        <p className="text-indigo-800">Interest rate for {loanDuration} days</p>
+                        <p className="text-4xl text-indigo-800">{rate}%</p>
+                    </div>
+                    <div className="flex flex-col gap-3 bg-linear-to-b from bg-indigo-400 to-indigo-900 border-dashed border-indigo-600 p-4  rounded-md">
+                        <p className="text-indigo-200">Repayment Amount</p>
+                        <p className="text-white text-4xl">₦ {repayment}</p>
+                    </div>
+                    <div>
+                        <button type="submit" className="p-2 rounded-md bg-indigo-800 text-white uppercase">Get Loan</button>
+                    </div>
+                </form>
 
             </div>
-          
-        </main>
-    )
+
+         </main>
+      )
 }
