@@ -1,11 +1,12 @@
     "use client"
 import { db } from "@/config/firebase.config";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { addDoc, collection } from "firebase/firestore";
 import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import * as yup from "yup";
+
 
  const schema = yup.object().shape({
     amount: yup.number().required("Amount is required").min(5000),
@@ -24,12 +25,14 @@ export default function GetLoan () {
     const [rate,setRate] = useState(0);
     const [loanDuration,setLoanDuration] = useState(0);
      const [repayment,setRepayment] = useState(0);
+     const [opsProgress,setOpsProgress]= useState(false);
 
     const {handleSubmit,handleChange, values,touched, errors} = useFormik({
         initialValues: {
             amount: 0,
         },
         onSubmit: async()=>{
+            setOpsProgress(true)
             try {
                  await addDoc(collection(db, "loans"),{
                     user: session?.user?.id,
@@ -39,6 +42,7 @@ export default function GetLoan () {
                     repayment: repayment,
                     timeOfRequest: new Date(), 
                 }) 
+                setOpsProgress(false);
                 alert('Loan request successful')
             }
             catch(errors){
@@ -109,8 +113,10 @@ export default function GetLoan () {
                         <p className="text-indigo-200">Repayment Amount</p>
                         <p className="text-white text-4xl">₦ {repayment}</p>
                     </div>
-                    <div>
-                        <button type="submit" className="p-2 rounded-md bg-indigo-800 text-white uppercase">Get Loan</button>
+                    <div className="flex items-center gap-3">
+                        <button type="submit" className="p-2 rounded-md bg-indigo-800 text-white uppercase">Get Loan
+                            {opsProgress ? <CircularProgress sx={{color: "purple"}} size="30px"/> : null}
+                        </button>
                     </div>
                 </form>
 

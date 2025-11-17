@@ -1,11 +1,31 @@
+     "use client"
+import { db } from "@/config/firebase.config";
+import { collection, getDoc } from "firebase/firestore";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useEffect } from "react";
+
+
+
 
 export default function myProfile (){
+   const {data:session} = useSession();
+
+       useEffect(()=>{
+         const fetchProfile = async ()=>{
+            const docRef = collection(db,"profileDetails", session?.user?.id);
+            const onSnap = await getDoc(docRef);
+
+         }
+
+        
+       })
+    
     return(
         <main className="min-h-screen flex justify-center py-5 md:py-6 md:px-12 lg:py-8 lg:px-16">
             <div className="w-full flex flex-col px-4 md:w-[380px] rounded-md shadow-md md:shadow-indigo-400">
                 <div>
-                    <h1 className="text-center text-xl font-bold text-gray-800 mb-8">Customer Information</h1>
+                    <h1 className="text-center text-xl font-bold text-gray-800 mb-8">Customer Profile</h1>
                 <div className="mt-2 flex justify-center gap-6 border-b border-gray-300 mb-2">
                     <Image
                     src="/babywem.png"
@@ -15,8 +35,8 @@ export default function myProfile (){
                     className="w-20 h-20 rounded-full"
                     />
                 <div>
-                    <p className="text-sm text-gray-800">Emmanuel</p>
-                    <p className="text-xs text-gray-800"> emmanuel@gmail.com</p>
+                    <p className="text-sm text-gray-800">{session?.user?.name.toLocaleUpperCase}</p>
+                    <p className="text-xs text-gray-800">{session?.user?.email} </p>
                 </div>
                 </div>
 
