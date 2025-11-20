@@ -7,7 +7,7 @@ export default function HomePage (){
 
               <div className="bg-[url(/laptop.png)] bg-right h-screen bg-indigo-500 bg-no-repeat">
                <div className="pt-10 pl-20 md:pt-20">
-                <p className="text-3xl text-white font-bold py-5 md:text-6xl md:text-white md:font-bold py-10">Banking the <br/>next billion</p>
+                <p className="text-3xl text-white font-bold py-5 md:text-6xl md:text-white md:font-bold md:py-10">Banking the <br/>next billion</p>
                 <p className="text-white text-xl mt-10 md:text-white md:text-xl">From smartphone ownership to full-stack digital 
                  banking, PalmPay<br/> makes financial
                  opportunity accessible at scale in high-growth <br/> emerging markets.</p>
@@ -21,7 +21,7 @@ export default function HomePage (){
                    hover:bg-red-800 hover:text-white">For Business</button>
                 </div>
                 
-                <div className="flex gap-5 px-15 mt-15 md:flex gap-5 px-15 mt-10">
+                <div className="flex gap-5 px-15 mt-15 md:flex md:gap-5 md:px-15 md:mt-10">
                 <div className="">
                    <Image 
                    src="/ft1.png"
@@ -43,7 +43,7 @@ export default function HomePage (){
 
              </div>
 
-             <div className="grid grid-cols-1 px-20 mt-10 md:grid-cols-6 px-10 mt-10">
+             <div className="grid grid-cols-1 px-20 mt-10 md:grid-cols-6 md:px-10 md:mt-10">
                 <div>
                    <Image 
                    src="/nd2.png"
@@ -99,7 +99,7 @@ export default function HomePage (){
                 </div>
                 
              </div>
-             <div className="grid grid-cols-1 gap-5 mt-18 md:grid-cols-1 md:px-30 lg:grid-cols-3 gap-5 mt-18 ">
+             <div className="grid grid-cols-1 gap-5 mt-18 md:grid-cols-1 md:px-30 lg:grid-cols-3 md:gap-5 md:mt-18 ">
                  <div className="bg-white shadow-md rounded-md w-79 md:w-100 h-60 pt-10 hover:bg-gray-100 lg:w-90">
                     <p className="text-2xl text-center text-indigo-800 ">Accessible</p>
                     <p className="text-xl text-indigo-800 pt-5 text-center justify-center">PalmPay removes cost barriers with<br/> fee-free accounts and transfers.<br/> 
@@ -119,7 +119,7 @@ export default function HomePage (){
                  </div>
              </div>
 
-             <div className="grid grid-cols-1 py-20 px-10 md:grid-cols-2 py-20 px-10">
+             <div className="grid grid-cols-1 py-20 px-10 md:grid-cols-2 md:py-20 md:px-10">
                 <div className="mt-20 px-10 md:px-10">
                   <Image 
                    src="/smallatm.svg"
