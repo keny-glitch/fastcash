@@ -3,19 +3,12 @@ import Image from "next/image"
 export default function HomePage (){
     return(
         <main className="min-h-screen">
-            <div className="w-[200] h-[200]">
-            <Image
-            src="/logopay.png"
-            alt="logopay.png"
-            width={100}
-            height={50}
-            />
-            </div>
+            
 
               <div className="bg-[url(/laptop.png)] bg-right h-screen bg-indigo-500 bg-no-repeat">
-               <div className="pt-10 pl-20 md:pt-20 pl-20">
-                <p className="text-3xl text-white font-bold py-5 md:text-6xl text-white font-bold py-10 ">Banking the <br/>next billion</p>
-                <p className="text-white text-xl mt-10 md:text-white text-xl ">From smartphone ownership to full-stack digital 
+               <div className="pt-10 pl-20 md:pt-20">
+                <p className="text-3xl text-white font-bold py-5 md:text-6xl md:text-white md:font-bold py-10">Banking the <br/>next billion</p>
+                <p className="text-white text-xl mt-10 md:text-white md:text-xl">From smartphone ownership to full-stack digital 
                  banking, PalmPay<br/> makes financial
                  opportunity accessible at scale in high-growth <br/> emerging markets.</p>
                 </div>

@@ -1,10 +1,10 @@
   "use client"
 import { db } from "@/config/firebase.config";
 import { collection,  getDocs, query, where } from "firebase/firestore";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-
 
 export default function MyProfile () {
       const {data: session} = useSession();
@@ -14,7 +14,8 @@ export default function MyProfile () {
           const fetchProfile =async ()=>{
              try {
                const q = query(collection(db, "profileDetails"),
-                       where("user", "==", session?.user?.id));
+                       where("user", "==", session?.user?.id)
+                      );
                       const onSnap = await getDocs(q);
                       if (!onSnap.empty) {
                         const docData = onSnap.docs[0];
@@ -29,18 +30,21 @@ export default function MyProfile () {
           }
           fetchProfile();
        },[session])
+       if (!session) {
+           redirect("/auth/login")
+       }
       
     return (
         <main className="min-h-screen flex justify-center py-5 md:py-6 md:px-12 lg:py-8 lg:px-16">
             <div className="w-full md:w-[350px] flex flex-col rounded-md shadow-md px-4 md:shadow-indigo-200 ">
                 <div>
                     <h1 className="text-center text-xl font-semibold text-gray-800 mb-8">Customer Profile</h1>
-                    <div className="mt-2 flex justify-center gap-6 border-b border-gray-300 mb-2">
+                    <div className="mt-2 flex justify-center gap-6 border-b border-gray-300 mb-2 ">
                         <Image
                          width={80}
                          height={80}
                          alt="profile-image"
-                         src="/babywem.png"
+                         src="/mybg.png"
                          className="w-20 h-20 rounded-full "
                         />
                         <div>
@@ -76,7 +80,11 @@ export default function MyProfile () {
                            <p className="text-gray-400">{profileData?.address} </p>
                        </div>
                     </div>
+                     <form >
+                        <button onClick={()=>{ signOut()}} type="submit" className="w-[100px] h-10 bg-red-600 text-white rounded-md shadow-md cursor-pointer ">Logout</button>
+                    </form>
                 </div>
+               
 
             </div>
 

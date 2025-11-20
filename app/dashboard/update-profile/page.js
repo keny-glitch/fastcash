@@ -6,6 +6,8 @@ import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import * as yup from "yup";
+import { FaAnglesRight } from "react-icons/fa6";
+import Link from "next/link";
 
  const schema = yup.object().shape({
     fullname: yup.string().required("fullName is required").min(5),
@@ -21,7 +23,6 @@ export default function UpdateProfile () {
     const {data: session} = useSession();
     const [opsProgress, setOpsProgress] = useState(false);
     const [open, setOpen] = useState(false);
-    
  const handleClose = ()=>{
     setOpen(false);
  }
@@ -63,8 +64,8 @@ const {handleSubmit,handleChange,touched,errors,values} = useFormik({
     validationSchema: schema,
 })
     return (
-        <main className="min-h-screen flex justify-center py-4 md:py-6 md:px-12 lg:py-8 lg:px-16">
-            <div className="w-full md:w-[500px] h-[450px] rounded-md  shadow-md px-4 py-6">
+        <main className="min-h-screen lg:flex lg:justify-center lg:gap-10 py-4 md:py-6 md:px-12 lg:py-8 lg:px-16">
+            <div className="w-full md:w-[500px] h-auto rounded-md  shadow-md px-4 py-6">
                 <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">Update Your Profile</h1>
                 <form onSubmit={handleSubmit}
                  className="flex flex-col gap-3">
@@ -176,6 +177,12 @@ const {handleSubmit,handleChange,touched,errors,values} = useFormik({
                 </form>
 
             </div>
+            <Link href="/dashboard/get-loan ">
+             <div className="flex justify-center gap-3 hover:border-b hover:border-indigo-400">
+                <p className="text-sm text-indigo-400">Proceed to get-Loan page</p>
+                <FaAnglesRight className="text-sm text-indigo-400 mt-1" />
+             </div>
+             </Link>
             {/* successDialog */}
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Success</DialogTitle>
@@ -189,4 +196,4 @@ const {handleSubmit,handleChange,touched,errors,values} = useFormik({
 
         </main>
     )
-} 
+}
