@@ -20,7 +20,6 @@ const duration = [
 
 export default function GetLoan () {
     const {data : session} = useSession();
-    console.log(session);
     const [clickedRate, setClickedRate] = useState(undefined);
     const [rate,setRate] = useState(0);
     const [loanDuration,setLoanDuration] = useState(0);
